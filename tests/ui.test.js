@@ -132,6 +132,7 @@ test('Register user with valid credentials', async ({ page }) => {
     await page.fill('input[name="confirm-pass"]', '123456');
     await page.click('input[type="submit"]');
     await page.$('a[href="/register"]');
+
     expect(page.url()).toBe('http://localhost:3000/register');
 });
 
@@ -223,3 +224,82 @@ test('Add book with correct data', async ({ page }) => {
 
     expect(page.url()).toBe('http://localhost:3000/catalog');
 });
+
+test('Add book with empty fields', async ({ page }) => {
+    await page.goto('http://localhost:3000/login');
+    await page.fill('input[name="email"]', 'peter@abv.bg');
+    await page.fill('input[name="password"]', '123456');
+
+    await Promise.all([
+        page.click('input[type="submit"]'),
+        page.waitForURL('http://localhost:3000/catalog')
+    ]);
+
+    await page.click('a[href="/create"]');
+    await page.waitForSelector('#create-form');
+    await page.click('#create-form input[type="submit"]');
+
+    page.on('dialog', async dialog => {
+        expect(dialog.type()).toContain('alert');
+        expect(dialog.message()).toContain('All fields are required!');
+        await dialog.accept();
+    });
+
+    await page.$('a[href="/create"]');
+    expect(page.url()).toBe('http://localhost:3000/create');
+});
+
+test('Add book with empty title field', async ({ page }) => {
+    await page.goto('http://localhost:3000/login');
+    await page.fill('input[name="email"]', 'peter@abv.bg');
+    await page.fill('input[name="password"]', '123456');
+
+    await Promise.all([
+        page.click('input[type="submit"]'),
+        page.waitForURL('http://localhost:3000/catalog')
+    ]);
+
+    await page.click('a[href="/create"]');
+    await page.waitForSelector('#create-form');
+    await page.fill('#description', 'Verry good book');
+    await page.fill('#image', 'https://example.com/book-image.jmg');
+    await page.selectOption('#type', 'Fiction');
+    await page.click('#create-form input[type="submit"]');
+
+    page.on('dialog', async dialog => {
+        expect(dialog.type()).toContain('alert');
+        expect(dialog.message()).toContain('All fields are required!');
+        await dialog.accept();
+    });
+
+    await page.$('a[href="/create"]');
+    expect(page.url()).toBe('http://localhost:3000/create');
+});
+
+test('Add book with empty description field', async ({ page }) => {
+    await page.goto('http://localhost:3000/login');
+    await page.fill('input[name="email"]', 'peter@abv.bg');
+    await page.fill('input[name="password"]', '123456');
+
+    await Promise.all([
+        page.click('input[type="submit"]'),
+        page.waitForURL('http://localhost:3000/catalog')
+    ]);
+
+    await page.click('a[href="/create"]');
+    await page.waitForSelector('#create-form');
+    await page.fill('#title', 'Verry good book');
+    await page.fill('#image', 'https://example.com/book-image.jmg');
+    await page.selectOption('#type', 'Fiction');
+    await page.click('#create-form input[type="submit"]');
+
+    page.on('dialog', async dialog => {
+        expect(dialog.type()).toContain('alert');
+        expect(dialog.message()).toContain('All fields are required!');
+        await dialog.accept();
+    });
+
+    await page.$('a[href="/create"]');
+    expect(page.url()).toBe('http://localhost:3000/create');
+});
+
