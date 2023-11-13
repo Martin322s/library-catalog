@@ -63,3 +63,26 @@ test('Verify that "Email" is visible after successful login', async ({ page }) =
     const isEmailTextVisible = await emailText.isVisible();
     expect(isEmailTextVisible).toBe(true);
 });
+
+test('Login user with valid credentials', async ({ page}) => {
+    await page.goto('http://localhost:3000/login');
+    await page.fill('input[name="email"]', 'peter@abv.bg');
+    await page.fill('input[name="password"]', '123456');
+    await page.click('input[type="submit"]');
+    await page.$('a[href="/catalog"]');
+    expect(page.url()).toBe('http://localhost:3000/catalog');
+});
+
+test('Verify login with empty fields', async ({ page }) => {
+    await page.goto('http://localhost:3000/login');
+    await page.click('input[type="submit"]');
+
+    page.on('dialog', async dialog => {
+        expect(dialog.type()).toContain('alert');
+        expect(dialog.message()).toContain('All fields are required!');
+        await dialog.accept();
+    });
+
+    await page.$('a[href="/login"]');
+    expect(page.url()).toBe('http://localhost:3000/login');
+});
