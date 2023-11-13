@@ -1,6 +1,8 @@
 const { test, expect } = require('@playwright/test');
 
-test('Verify that "All Books" link is visible', async ({ page}) => {
+// Guests links visibilty
+
+test('Verify that "All Books" link is visible', async ({ page }) => {
     await page.goto('http://localhost:3000');
     await page.waitForSelector('nav.navbar');
     const allBooksLink = await page.$('a[href="/catalog"]');
@@ -23,6 +25,8 @@ test('Verify that "Register" link is visible', async ({ page }) => {
     const isRegisterLinkVisible = await registerLink.isVisible();
     expect(isRegisterLinkVisible).toBe(true);
 });
+
+// Users guests links visibilty
 
 test('Verify that "All Books" link is visible after successful login', async ({ page }) => {
     await page.goto('http://localhost:3000/login');
@@ -64,7 +68,9 @@ test('Verify that "Email" is visible after successful login', async ({ page }) =
     expect(isEmailTextVisible).toBe(true);
 });
 
-test('Login user with valid credentials', async ({ page}) => {
+// Login page tests
+
+test('Login user with valid credentials', async ({ page }) => {
     await page.goto('http://localhost:3000/login');
     await page.fill('input[name="email"]', 'peter@abv.bg');
     await page.fill('input[name="password"]', '123456');
@@ -117,7 +123,9 @@ test('Verify login with empty password', async ({ page }) => {
     expect(page.url()).toBe('http://localhost:3000/login');
 });
 
-test('Register user with valid credentials', async ({ page}) => {
+// Register page tests
+
+test('Register user with valid credentials', async ({ page }) => {
     await page.goto('http://localhost:3000/register');
     await page.fill('input[name="email"]', 'peter1@abv.bg');
     await page.fill('input[name="password"]', '123456');
@@ -188,4 +196,30 @@ test('Verify register with different passwords', async ({ page }) => {
 
     await page.$('a[href="/register"]');
     expect(page.url()).toBe('http://localhost:3000/register');
+});
+
+// Add book page tests
+
+test('Add book with correct data', async ({ page }) => {
+    await page.goto('http://localhost:3000/login');
+    await page.fill('input[name="email"]', 'peter@abv.bg');
+    await page.fill('input[name="password"]', '123456');
+
+    await Promise.all([
+        page.click('input[type="submit"]'),
+        page.waitForURL('http://localhost:3000/catalog')
+    ]);
+
+    await page.click('a[href="/create"]');
+    await page.waitForSelector('#create-form');
+
+    await page.fill('#title', 'Think and grow rich');
+    await page.fill('#description', 'Verry good book');
+    await page.fill('#image', 'https://example.com/book-image.jmg');
+    await page.selectOption('#type', 'Fiction');
+
+    await page.click('#create-form input[type="submit"]');
+    await page.waitForURL('http://localhost:3000/catalog');
+
+    expect(page.url()).toBe('http://localhost:3000/catalog');
 });
