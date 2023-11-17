@@ -24,6 +24,8 @@ jobs:
         working-directory: server
       - name: Start app
         run: npm start &
+      - name: Install playwright
+        run: npx playwright install
       - name: Run tests
         run: npx playwright test tests/ui.test.js
         working-directory: tests
