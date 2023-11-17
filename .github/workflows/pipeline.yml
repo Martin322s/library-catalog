@@ -20,10 +20,10 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Start server
-        run: node server.js
+        run: node server.js &
         working-directory: server
       - name: Start app
-        run: npm start
+        run: npm start &
       - name: Run tests
         run: npm test
         working-directory: tests
