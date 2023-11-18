@@ -1,4 +1,4 @@
-name: build-and-test
+name: build-test-deploy
 
 on:
   push:
@@ -48,7 +48,7 @@ jobs:
         run: npx playwright test tests/ui.test.js
         working-directory: tests
   deploy:
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to Production
