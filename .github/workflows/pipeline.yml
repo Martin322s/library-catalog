@@ -25,6 +25,7 @@ jobs:
       - name: Start app
         run: npm start &
   test:
+    needs: build
     runs-on: ubuntu-latest
     steps:
         - name: Checkout repo
