@@ -24,8 +24,18 @@ jobs:
         working-directory: server
       - name: Start app
         run: npm start &
-      - name: Install playwright
-        run: npx playwright install
-      - name: Run tests
-        run: npx playwright test tests/ui.test.js
-        working-directory: tests
+  test:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout repo
+          uses: actions/checkout@v3
+        - name: Use Node.js 18.x
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18.x
+            cache: "npm"
+        - name: Install playwright
+          run: npx playwright install
+        - name: Run tests
+          run: npx playwright test tests/ui.test.js
+          working-directory: tests
