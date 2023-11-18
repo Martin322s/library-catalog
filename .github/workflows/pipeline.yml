@@ -51,9 +51,6 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - name: Start server
-        run: node server.js
-        working-directory: server
       - name: Deploy to Production
         uses: johnbeynon/render-deploy-action@v0.0.8
         with:
