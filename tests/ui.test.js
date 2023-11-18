@@ -133,7 +133,7 @@ test('Register user with valid credentials', async ({ page }) => {
     await page.click('input[type="submit"]');
     await page.$('a[href="/register"]');
 
-    expect(page.url()).toBe('http://localhost:3000/register');
+    expect(page.url()).toBe('http://localhost:3000/catalog');
 });
 
 test('Verify register with empty fields', async ({ page }) => {
