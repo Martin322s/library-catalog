@@ -7,8 +7,8 @@
         "test": "mocha tests",
         "start": "http-server -p 3000 -a 0.0.0.0",
         "start-for-tests": "http-server -a localhost -p 3000 -P http://localhost:3000? -c-1",
-        "start-server": "node server/server.js",
-        "build": "npm start && npm run start-server"
+        "start-server": "node ./server/server.js",
+        "build": "concurrently \"npm start\" \"npm run start-server\""
     },
     "author": "",
     "license": "ISC",
@@ -22,6 +22,7 @@
     "devDependencies": {
         "@playwright/test": "^1.39.0",
         "chai": "^4.3.4",
+        "concurrently": "^8.2.2",
         "http-server": "0.12.3",
         "mocha": "^8.3.2",
         "playwright-chromium": "1.9.2"
