@@ -1,5 +1,11 @@
 const { test, expect } = require('@playwright/test');
 
+const { chromium } = require('playwright');
+
+(async () => {
+    const browser = await chromium.launch({ headless: true });
+})();
+
 // Guests links visibilty
 
 test('Verify that "All Books" link is visible', async ({ page }) => {

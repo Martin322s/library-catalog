@@ -1,7 +1,9 @@
 import * as api from './api.js';
 
-const host = 'https://softuni-practice-server-ufdr.onrender.com'
-api.settings.host = 'https://softuni-practice-server-ufdr.onrender.com';
+const isProduction = !window.location.hostname.includes('localhost');
+
+const host = isProduction ? 'https://softuni-practice-server-ufdr.onrender.com' : 'http://localhost:3030'
+api.settings.host = isProduction ? 'https://softuni-practice-server-ufdr.onrender.com' : 'http://localhost:3030';
 
 export const login = api.login;
 export const register = api.register;
